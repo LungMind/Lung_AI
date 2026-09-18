@@ -1,0 +1,23 @@
+# Core Deep Learning & Machine Learning
+tensorflow>=2.12.0
+keras>=2.12.0
+scikit-learn>=1.2.0
+
+# Scientific & Data Processing
+numpy>=1.23.5
+pandas>=1.5.3
+
+# Image Processing & Computer Vision
+opencv-python-headless>=4.7.0.72
+Pillow>=9.5.0
+
+# Visualization
+matplotlib>=3.7.1
+seaborn>=0.12.2
+
+# Interactive Web Application
+streamlit>=1.24.0
+
+# Utilities
+tqdm>=4.65.0
+

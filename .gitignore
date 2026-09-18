@@ -1,0 +1,94 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+.venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data directory (protect datasets from accidental commit)
+data/*
+!data/README.md
+The IQ-OTHNCCD lung cancer dataset/
+Test cases/
+*.csv
+!cancer patient data sets.csv
+
+# MIMIC-IV clinical data tables (Protected Health Information / Restricted Data)
+admissions.csv
+diagnoses_icd.csv
+microbiologyevents.csv
+procedures_icd.csv
+services.csv
+discharge.csv*
+radiology.csv*
+*.csv.gz
+text_model/data/*
+!text_model/data/.gitkeep
+
+# Trained model weights & checkpoints
+models/*
+!models/.gitkeep
+*.h5
+*.keras
+*.ckpt*
+*.pt
+*.pth
+
+# Results & artifacts generated during runs
+results/plots/*
+!results/plots/.gitkeep
+results/confusion_matrix/*
+!results/confusion_matrix/.gitkeep
+results/metrics/*
+!results/metrics/.gitkeep
+results/gradcam/*
+!results/gradcam/.gitkeep
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*-checkpoint.ipynb
+
+# Streamlit temporary files
+.streamlit/

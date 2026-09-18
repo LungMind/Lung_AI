@@ -1,0 +1,258 @@
+{
+  "files_inspected": [
+    {
+      "filename": "admissions.csv",
+      "file_size_bytes": 70057139,
+      "file_size_formatted": "66.81 MB",
+      "total_rows": 431088,
+      "columns": [
+        "subject_id",
+        "hadm_id",
+        "admittime",
+        "dischtime",
+        "deathtime",
+        "admission_type",
+        "admission_location",
+        "discharge_location",
+        "insurance",
+        "language",
+        "marital_status",
+        "race",
+        "edregtime",
+        "edouttime",
+        "hospital_expire_flag"
+      ],
+      "missing_counts": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "admittime": 0,
+        "dischtime": 0,
+        "deathtime": 422463,
+        "admission_type": 0,
+        "admission_location": 0,
+        "discharge_location": 119314,
+        "insurance": 0,
+        "language": 0,
+        "marital_status": 9220,
+        "race": 0,
+        "edregtime": 131828,
+        "edouttime": 131828,
+        "hospital_expire_flag": 0
+      },
+      "unique_patients": 180747,
+      "unique_admissions": 431088,
+      "max_text_lengths": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "admittime": 0,
+        "dischtime": 0,
+        "deathtime": 0,
+        "admission_type": 0,
+        "admission_location": 0,
+        "discharge_location": 0,
+        "insurance": 0,
+        "language": 0,
+        "marital_status": 0,
+        "race": 0,
+        "edregtime": 0,
+        "edouttime": 0,
+        "hospital_expire_flag": 0
+      }
+    },
+    {
+      "filename": "diagnoses_icd.csv",
+      "file_size_bytes": 134631184,
+      "file_size_formatted": "128.39 MB",
+      "total_rows": 4752265,
+      "columns": [
+        "subject_id",
+        "hadm_id",
+        "seq_num",
+        "icd_code",
+        "icd_version"
+      ],
+      "missing_counts": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "seq_num": 0,
+        "icd_code": 0,
+        "icd_version": 0
+      },
+      "unique_patients": 180651,
+      "unique_admissions": 430708,
+      "max_text_lengths": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "seq_num": 0,
+        "icd_code": 0,
+        "icd_version": 0
+      }
+    },
+    {
+      "filename": "microbiologyevents.csv",
+      "file_size_bytes": 730971704,
+      "file_size_formatted": "697.11 MB",
+      "total_rows": 3223345,
+      "columns": [
+        "microevent_id",
+        "subject_id",
+        "hadm_id",
+        "micro_specimen_id",
+        "chartdate",
+        "charttime",
+        "spec_itemid",
+        "spec_type_desc",
+        "test_seq",
+        "storedate",
+        "storetime",
+        "test_itemid",
+        "test_name",
+        "org_itemid",
+        "org_name",
+        "isolate_num",
+        "quantity",
+        "ab_itemid",
+        "ab_name",
+        "dilution_text",
+        "dilution_comparison",
+        "dilution_value",
+        "interpretation",
+        "comments"
+      ],
+      "missing_counts": {
+        "microevent_id": 0,
+        "subject_id": 0,
+        "hadm_id": 1827072,
+        "micro_specimen_id": 0,
+        "chartdate": 0,
+        "charttime": 257340,
+        "spec_itemid": 0,
+        "spec_type_desc": 1,
+        "test_seq": 0,
+        "storedate": 12141,
+        "storetime": 25083,
+        "test_itemid": 0,
+        "test_name": 0,
+        "org_itemid": 1937911,
+        "org_name": 1937911,
+        "isolate_num": 1937911,
+        "quantity": 3223296,
+        "ab_itemid": 2116909,
+        "ab_name": 2116909,
+        "dilution_text": 2144094,
+        "dilution_comparison": 2144731,
+        "dilution_value": 2144731,
+        "interpretation": 2116909,
+        "comments": 989120
+      },
+      "unique_patients": 181250,
+      "unique_admissions": 163843,
+      "max_text_lengths": {
+        "microevent_id": 0,
+        "subject_id": 0,
+        "hadm_id": 0,
+        "micro_specimen_id": 0,
+        "chartdate": 0,
+        "charttime": 0,
+        "spec_itemid": 0,
+        "spec_type_desc": 0,
+        "test_seq": 0,
+        "storedate": 0,
+        "storetime": 0,
+        "test_itemid": 0,
+        "test_name": 0,
+        "org_itemid": 0,
+        "org_name": 0,
+        "isolate_num": 0,
+        "quantity": 0,
+        "ab_itemid": 0,
+        "ab_name": 0,
+        "dilution_text": 0,
+        "dilution_comparison": 0,
+        "dilution_value": 0,
+        "interpretation": 0,
+        "comments": 0
+      }
+    },
+    {
+      "filename": "procedures_icd.csv",
+      "file_size_bytes": 26316158,
+      "file_size_formatted": "25.10 MB",
+      "total_rows": 668993,
+      "columns": [
+        "subject_id",
+        "hadm_id",
+        "seq_num",
+        "chartdate",
+        "icd_code",
+        "icd_version"
+      ],
+      "missing_counts": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "seq_num": 0,
+        "chartdate": 0,
+        "icd_code": 0,
+        "icd_version": 0
+      },
+      "unique_patients": 121875,
+      "unique_admissions": 229256,
+      "max_text_lengths": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "seq_num": 0,
+        "chartdate": 0,
+        "icd_code": 0,
+        "icd_version": 0
+      }
+    },
+    {
+      "filename": "services.csv",
+      "file_size_bytes": 20542811,
+      "file_size_formatted": "19.59 MB",
+      "total_rows": 467851,
+      "columns": [
+        "subject_id",
+        "hadm_id",
+        "transfertime",
+        "prev_service",
+        "curr_service"
+      ],
+      "missing_counts": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "transfertime": 0,
+        "prev_service": 429714,
+        "curr_service": 0
+      },
+      "unique_patients": 180747,
+      "unique_admissions": 431088,
+      "max_text_lengths": {
+        "subject_id": 0,
+        "hadm_id": 0,
+        "transfertime": 0,
+        "prev_service": 0,
+        "curr_service": 0
+      }
+    }
+  ],
+  "clinical_text_available": false,
+  "diagnosis_data_available": true,
+  "note_to_diagnosis_link_possible": false,
+  "candidate_text_columns": [
+    {
+      "file": "admissions.csv",
+      "column": "discharge_location",
+      "max_length": 0,
+      "is_name_match": true,
+      "is_long_text": false
+    },
+    {
+      "file": "microbiologyevents.csv",
+      "column": "dilution_text",
+      "max_length": 0,
+      "is_name_match": true,
+      "is_long_text": false
+    }
+  ]
+}
