@@ -26,7 +26,7 @@ from src.config import (
 )
 from src.attention import SequenceAttention
 from src.preprocessing import preprocess_pil_image
-from src.explainability import generate_gradcam_heatmap, overlay_gradcam
+from src.explainability import generate_gradcam_heatmap, overlay_gradcam, get_grad_model
 
 # -----------------------------------------------------------------------------
 # 1. Page Configuration
@@ -324,20 +324,29 @@ st.markdown(
 # -----------------------------------------------------------------------------
 # 3. Cached Model & Metadata Loading
 # -----------------------------------------------------------------------------
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(show_spinner="⚡ Initializing LUNG AI Neural Engine...")
 def load_cached_model():
-    """Load the trained Hybrid Keras model once into cache."""
+    """Load the trained Hybrid Keras model once into cache with pre-warmed execution graphs."""
     if not HYBRID_MODEL_PATH.exists():
-        return None
+        return None, None
     try:
         model = tf.keras.models.load_model(
             str(HYBRID_MODEL_PATH),
             custom_objects={"SequenceAttention": SequenceAttention},
+            compile=False,
         )
-        return model
+        grad_model = get_grad_model(model)
+        # Pre-warm execution graphs with a dummy tensor so first user query is instant
+        dummy = tf.zeros((1, IMAGE_SIZE[0], IMAGE_SIZE[1], 3), dtype=tf.float32)
+        _ = model(dummy, training=False)
+        with tf.GradientTape() as tape:
+            c_out, preds = grad_model(dummy)
+            _ = tape.gradient(preds[:, 0], c_out)
+
+        return model, grad_model
     except Exception as e:
         st.session_state["model_load_error"] = str(e)
-        return None
+        return None, None
 
 
 @st.cache_data(show_spinner=False)
@@ -352,7 +361,7 @@ def load_metrics_metadata():
     return None
 
 
-model = load_cached_model()
+model, grad_model = load_cached_model()
 metrics_data = load_metrics_metadata()
 
 
@@ -537,9 +546,11 @@ if nav_choice == "CT Analysis":
                 )
                 pil_image = None
         else:
-            # Clear stored prediction state when file is removed
+            # Clear stored prediction and Grad-CAM state when file is removed
             st.session_state.pop("prediction_result", None)
             st.session_state.pop("active_file", None)
+            st.session_state.pop("gradcam_result", None)
+            st.session_state.pop("gradcam_for_file", None)
 
             st.markdown(
                 """
@@ -573,7 +584,8 @@ if nav_choice == "CT Analysis":
                     try:
                         with st.spinner("Processing CT slice through CNN-BiLSTM-Attention..."):
                             preprocessed_tensor = preprocess_pil_image(pil_image, target_size=IMAGE_SIZE)
-                            probabilities = model.predict(preprocessed_tensor, verbose=0)[0]
+                            # Direct tensor call is 3-5x faster than model.predict for single-slice inference
+                            probabilities = model(preprocessed_tensor, training=False).numpy()[0]
                             pred_idx = int(np.argmax(probabilities))
                             pred_class = CLASS_NAMES[pred_idx]
                             confidence = float(probabilities[pred_idx]) * 100.0
@@ -708,27 +720,36 @@ if nav_choice == "CT Analysis":
 
         res = st.session_state["prediction_result"]
         try:
-            with st.spinner("Generating Grad-CAM feature attribution..."):
-                heatmap = generate_gradcam_heatmap(
-                    model,
-                    res["tensor"],
-                    pred_index=res["pred_idx"],
-                )
+            # Cache Grad-CAM in session state to avoid re-running on every Streamlit rerun
+            if st.session_state.get("gradcam_for_file") != uploaded_file.name or "gradcam_result" not in st.session_state:
+                with st.spinner("Generating Grad-CAM feature attribution..."):
+                    heatmap = generate_gradcam_heatmap(
+                        model,
+                        res["tensor"],
+                        pred_index=res["pred_idx"],
+                        grad_model=grad_model,
+                    )
 
-                rgb_np = np.array(pil_image.convert("RGB"))
-                resized_rgb = tf.image.resize(rgb_np, IMAGE_SIZE).numpy().astype(np.uint8)
-                overlay = overlay_gradcam(resized_rgb, heatmap, alpha=0.45)
+                    rgb_np = np.array(pil_image.convert("RGB"))
+                    resized_rgb = tf.image.resize(rgb_np, IMAGE_SIZE).numpy().astype(np.uint8)
+                    overlay = overlay_gradcam(resized_rgb, heatmap, alpha=0.45)
+                    st.session_state["gradcam_result"] = {
+                        "resized_rgb": resized_rgb,
+                        "overlay": overlay,
+                    }
+                    st.session_state["gradcam_for_file"] = uploaded_file.name
 
+            gc_res = st.session_state["gradcam_result"]
             col_orig, col_gradcam = st.columns(2, gap="medium")
             with col_orig:
                 st.image(
-                    resized_rgb,
+                    gc_res["resized_rgb"],
                     caption="Original (Preprocessed CT Slice)",
                     use_container_width=True,
                 )
             with col_gradcam:
                 st.image(
-                    overlay,
+                    gc_res["overlay"],
                     caption="Grad-CAM (Attention & Activation Overlay)",
                     use_container_width=True,
                 )

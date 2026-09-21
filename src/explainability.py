@@ -48,7 +48,17 @@ def find_target_conv_layer(model):
     raise ValueError("No Conv2D layer found in the model for Grad-CAM computation.")
 
 
-def generate_gradcam_heatmap(model, img_array, pred_index=None, target_conv_layer=None):
+def get_grad_model(model, target_conv_layer=None):
+    """Construct or return reusable multi-output model for Grad-CAM."""
+    if target_conv_layer is None:
+        target_conv_layer = find_target_conv_layer(model)
+    return tf.keras.models.Model(
+        inputs=model.inputs,
+        outputs=[target_conv_layer.output, model.output],
+    )
+
+
+def generate_gradcam_heatmap(model, img_array, pred_index=None, target_conv_layer=None, grad_model=None):
     """Compute Grad-CAM activation heatmap for a single preprocessed CT slice.
 
     Args:
@@ -56,18 +66,14 @@ def generate_gradcam_heatmap(model, img_array, pred_index=None, target_conv_laye
         img_array: Preprocessed numpy array of shape (1, 224, 224, 3).
         pred_index: Target class index to explain (None = model top prediction).
         target_conv_layer: Specific Conv2D layer (None = automatically detected).
+        grad_model: Optional pre-built Grad-CAM model to avoid graph recreation overhead.
 
     Returns:
         np.ndarray: 2D heatmap normalized to [0, 1] of shape (224, 224).
     """
-    if target_conv_layer is None:
-        target_conv_layer = find_target_conv_layer(model)
+    if grad_model is None:
+        grad_model = get_grad_model(model, target_conv_layer)
 
-    # Multi-output model: inputs -> [conv_features, model_predictions]
-    grad_model = tf.keras.models.Model(
-        inputs=model.inputs,
-        outputs=[target_conv_layer.output, model.output],
-    )
 
     with tf.GradientTape() as tape:
         conv_outputs, predictions = grad_model(img_array)

@@ -26,8 +26,9 @@ def run_test_suite():
 
     # 1. Test model loading
     print("\n[TEST 1] Loading cached model...")
-    model = load_cached_model()
+    model, grad_model = load_cached_model()
     assert model is not None, "Failed to load cached hybrid model!"
+    assert grad_model is not None, "Failed to load Grad-CAM model!"
     print(f"  [PASS] Model loaded successfully: Input shape {model.input_shape}, Output shape {model.output_shape}")
 
     # 2. Test predictions on actual test set images for all 3 classes
